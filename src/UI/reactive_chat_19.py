@@ -16,6 +16,14 @@ class ReactiveChat(param.Parameterized):
 
         pn.extension(design="material")
 
+        pn.config.raw_css.append("""
+            .tabulator-cell {
+                white-space: normal !important;
+                word-wrap: break-word;
+                padding: 5px;
+            }
+            """)
+
         self.groupchat_manager = groupchat_manager
 
         # Learn tab
@@ -35,14 +43,33 @@ class ReactiveChat(param.Parameterized):
         # Question and answer details for tracking
         self.question_details = pn.widgets.Tabulator(
             pd.DataFrame(columns=['Question', 'User Response', 'Correct']),
-            show_index=True,  # Hide the index column
+            show_index=False,  # Hide the index column
             height=400,  # Set height for better visibility
             sizing_mode='stretch_width',  # Stretch to fit the container
-            configuration={'columns': [
-                {'field': 'Question', 'title': 'Question', 'width': 300},  # Set width for Question column
-                {'field': 'User Response', 'title': 'User Response', 'width': 300},  # Set width for User Response column
-             {'field': 'Correct', 'title': 'Correct', 'width': 100}  # Set width for Correct column
-            ]}
+            configuration={
+                'layout': 'fitColumns',  # Ensure columns fit the container
+                'columns': [
+                    {
+                        'field': 'Question',
+                        'title': 'Question',
+                        'widthGrow': 3,  # Allows the column to grow proportionally
+                        'formatter': 'plaintext',  # Plain text formatter
+                    },
+                    {
+                        'field': 'User Response',
+                        'title': 'User Response',
+                        'widthGrow': 3,  # Allows the column to grow proportionally
+                        'formatter': 'plaintext',  # Plain text formatter
+                    },
+                    {
+                        'field': 'Correct',
+                        'title': 'Correct',
+                        'widthGrow': 1,  # Smaller growth factor
+                        'formatter': 'tickCross',  # Use tick/cross for boolean values
+                        'hozAlign': 'center',  # Center align for better aesthetics
+                    }
+                ],
+            }
         )
 
         # Model tab. Capabilities for the LearnerModel
@@ -185,6 +212,7 @@ class ReactiveChat(param.Parameterized):
     @groupchat_manager.setter
     def groupchat_manager(self, groupchat_manager: autogen.GroupChatManager):
         self._groupchat_manager = groupchat_manager
+
 if __name__ == "main":    
-    app = create_app()
+    app = ReactiveChat().draw_view()
     pn.serve(app, callback_exception='verbose')
