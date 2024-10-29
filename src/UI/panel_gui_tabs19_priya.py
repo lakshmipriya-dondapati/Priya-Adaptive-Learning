@@ -12,6 +12,11 @@ from src.Agents.chat_manager_fsms import FSM
 from src.Agents.group_chat_manager_agent import CustomGroupChatManager, CustomGroupChat
 from src.UI.reactive_chat_19 import ReactiveChat
 from src.UI.avatar import avatar
+import logging
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(levelname)s - %(module)s - %(filename)s - %(funcName)s - line %(lineno)d - %(asctime)s - %(name)s - %(message)s')
+
 
 os.environ["AUTOGEN_USE_DOCKER"] = "False"
 
