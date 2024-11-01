@@ -18,12 +18,16 @@ class ReactiveChat(param.Parameterized):
         pn.extension(design="material")
 
         pn.config.raw_css.append("""
-            .tabulator-cell {
-                white-space: normal !important;
-                word-wrap: break-word;
-                padding: 5px;
-            }
-            """)
+        .tabulator-cell {
+            white-space: normal !important;  /* Allows text to wrap */
+            word-wrap: break-word;           /* Breaks long words if necessary */
+            padding: 5px;                    /* Adds some padding for better readability */
+        }
+        .custom-table-container {
+            width: 99vw; /* 99% of the viewport width */
+            margin: 0 auto; /* Center the table */
+        }
+        """)
 
         self.groupchat_manager = groupchat_manager
 
@@ -43,9 +47,9 @@ class ReactiveChat(param.Parameterized):
 
         # Question and answer details for tracking
         self.question_details = pn.widgets.Tabulator(
-            pd.DataFrame(columns=['Question', 'User Response', 'Correct']),
+            pd.DataFrame(columns=['Question', 'Agent Response', 'Correct']),
             show_index=False,  # Hide the index column
-            height=400,  # Set height for better visibility
+            height=400,        # Set height for better visibility
             sizing_mode='stretch_width',  # Stretch to fit the container
             configuration={
                 'layout': 'fitColumns',  # Ensure columns fit the container
@@ -53,25 +57,27 @@ class ReactiveChat(param.Parameterized):
                     {
                         'field': 'Question',
                         'title': 'Question',
-                        'widthGrow': 3,  # Allows the column to grow proportionally
+                        'widthGrow': 1,  
                         'formatter': 'plaintext',  # Plain text formatter
                     },
                     {
                         'field': 'User Response',
                         'title': 'User Response',
-                        'widthGrow': 3,  # Allows the column to grow proportionally
+                        'widthGrow': 3,  
                         'formatter': 'plaintext',  # Plain text formatter
                     },
                     {
                         'field': 'Correct',
                         'title': 'Correct',
-                        'widthGrow': 1,  # Smaller growth factor
+                        'widthGrow': 1,  
                         'formatter': 'tickCross',  # Use tick/cross for boolean values
-                        'hozAlign': 'center',  # Center align for better aesthetics
+                        'hozAlign': 'center',     # Center align for better aesthetics
                     }
                 ],
             }
         )
+
+
 
         # Model tab. Capabilities for the LearnerModel
         self.MODEL_TAB_NAME = "ModelTab"
@@ -114,7 +120,7 @@ class ReactiveChat(param.Parameterized):
 
     ########### tab3: Progress
     def update_progress(self, contents, user):        
-        if user == "LevelAdapterAgent":
+        if user == "LearnerModelAgent":
             logging.info(f"update_progress(). User= {user}. contents=\n{contents}")
         # Check if the response is from the LevelAdapterAgent
             
