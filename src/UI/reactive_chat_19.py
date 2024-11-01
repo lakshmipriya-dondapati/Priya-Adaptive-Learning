@@ -61,8 +61,8 @@ class ReactiveChat(param.Parameterized):
                         'formatter': 'plaintext',  # Plain text formatter
                     },
                     {
-                        'field': 'User Response',
-                        'title': 'User Response',
+                        'field': 'Agent Response',
+                        'title': 'Agent Response',
                         'widthGrow': 3,  
                         'formatter': 'plaintext',  # Plain text formatter
                     },
@@ -127,8 +127,12 @@ class ReactiveChat(param.Parameterized):
             all_messages = self.groupchat_manager.groupchat.get_messages()
             last_message = all_messages[-1]["content"]
             
-            pattern = re.compile(r'\b(incorrect|wrong)\b', re.IGNORECASE)            
-            is_correct = not pattern.search(last_message)
+            # pattern = re.compile(r'\b(incorrect|wrong)\b', re.IGNORECASE)            
+            # is_correct = not pattern.search(last_message)
+
+            pattern_correct = re.compile(r"StudentAgent's answer is correct", re.IGNORECASE)
+            is_correct = bool(pattern_correct.search(contents))
+
 
 
             print("##### UPDATE PROGRESS::contents \n", contents)
